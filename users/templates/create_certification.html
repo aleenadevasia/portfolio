@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Certification</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for adjustments */
+        .custom-container {
+            max-width: 800px;
+            margin: 100px auto; /* Adjust top margin for centering */
+        }
+
+        /* Margin for the heading */
+        h1 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container custom-container">
+        <h1>Create Certification</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="id_title" class="col-sm-3 col-form-label">Title:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="id_title" name="title" class="form-control" value="{{ form.title.value }}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_organization" class="col-sm-3 col-form-label">Organization:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="id_organization" name="organization" class="form-control" value="{{ form.organization.value }}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_issue_date" class="col-sm-3 col-form-label">Issue Date:</label>
+                <div class="col-sm-9">
+                    <input type="date" id="id_issue_date" name="issue_date" class="form-control" value="{{ form.issue_date.value }}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary btn-block">Save Certification</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (optional, if you need Bootstrap JavaScript features) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

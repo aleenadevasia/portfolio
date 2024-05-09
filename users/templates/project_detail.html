@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Detail</title>
+</head>
+<body>
+    <h1>Project Detail</h1>
+    <h2>{{ project.title }}</h2>
+    <p><strong>Description:</strong> {{ project.description }}</p>
+    <p><strong>Start Date:</strong> {{ project.start_date }}</p>
+    <p><strong>End Date:</strong> {% if project.end_date %}{{ project.end_date }}{% else %}Ongoing{% endif %}</p>
+    <!-- Add other project details here -->
+    <a href="{% url 'project_list' %}">Back to Project List</a>
+</body>
+</html>

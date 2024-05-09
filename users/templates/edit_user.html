@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col">
+                    <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="{%url 'index' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'base_view' user_profile_id=user_profile.id %}">Portfolio</a></li>
+                            {% if request.user.is_superuser %}
+                <li class="breadcrumb-item"><a href="{% url 'admin_view' %}">User List</a></li>
+            {% endif %}
+                            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4 h-100">
+                        <div class="card-body text-center">
+                            <img src="{{ user_profile.profile_picture.url }}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                            <h5 class="my-3">{{ user_profile.person }}</h5>
+                            <p class="text-muted mb-1">{{ user_profile.bio }}</p>
+                                                        <p class="text-muted mb-1">{{ user_profile.user }}</p>
+
+                                                        <p class="text-muted mb-1">{{ user_profile.email }}</p>
+                            <p class="text-muted mb-1">{{ user_profile.contact }}</p>
+                                        <a href="{% url 'index' %}" class="btn btn-danger">Logout</a>
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4 h-100">
+                        <div class="card-body">
+                            <h2>Edit User</h2>
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- Other fields -->
+
+
+                                <label for="person">Name:</label><br>
+                                <input type="text" id="person" name="person" class="form-control" value="{{ user_profile.person }}"><br>
+                                <label for="bio">Bio:</label><br>
+                                <textarea id="bio" name="bio" class="form-control">{{ user_profile.bio }}</textarea><br>
+
+                                <label for="skills">Skills:</label><br>
+                                <input type="text" id="skills" name="skills" value="{{ user_profile.skills }}" class="form-control"><br>
+
+                                <label for="profile_picture">Profile Picture:</label><br>
+                                <input type="file" id="profile_picture" name="profile_picture" class="form-control"><br>
+
+                                <label for="email">Email:</label><br>
+                                <input type="email" id="email" name="email" value="{{ user_profile.email }}" class="form-control"><br>
+
+                                <label for="contact">Contact:</label><br>
+                                <input type="text" id="contact" name="contact" value="{{ user_profile.contact }}" class="form-control"><br>
+                                <!-- Other fields -->
+
+                                <button class="btn btn-success" type="submit">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Include other sections like projects, work experiences, education details, and certification details here -->
+                </div>
+            </div>
+
+            <!-- Four blocks with white background -->
+            <div class="row mt-4">
+<div class="col-md-3 d-flex">
+    <div class="card w-100">
+        <div class="card-body d-flex flex-column">
+            <h2>Projects:</h2>
+            {% if projects %}
+                <ul>
+                    {% for project in projects %}
+                        <li>
+                            <p>{{ project.title }}</p>
+                            <div class="d-flex">
+                                <a class="btn btn-warning mr-2" href="{% url 'edit_project' project.id %}">Edit</a>
+                                <form action="{% url 'delete_project' project.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No projects available.</p>
+            {% endif %}
+            <a class="btn btn-primary mt-auto" href="{% url 'project_create' %}" role="button">Add Project</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 d-flex">
+    <div class="card w-100">
+        <div class="card-body d-flex flex-column">
+            <h2>Work Experiences:</h2>
+            {% if work_experiences %}
+                <ul>
+                    {% for work_experience in work_experiences %}
+                        <li>
+                            <p>{{ work_experience.company_name }}</p>
+                            <div class="d-flex">
+                                <a class="btn btn-warning mr-2" href="{% url 'edit_work_experience' work_experience.id %}">Edit</a>
+                                <form action="{% url 'delete_work_experience' work_experience.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger" type="submit" id="deleteForm" onclick="confirmDelete">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No work experiences available.</p>
+            {% endif %}
+            <a href="{% url 'create_work_experience' %}" class="btn btn-primary mt-auto">Add Work Experience</a>
+        </div>
+    </div>
+</div>
+
+                <div class="col-md-3 d-flex">
+                    <div class="card w-100">
+                        <div class="card-body d-flex flex-column">
+                            <!-- Content for third block -->
+                            <h2>Education Details:</h2>
+{% if educations %}
+    <ul>
+        {% for education in educations %}
+            <li>
+
+                <p>Degree: {{ education.degree }}</p>
+                <!-- Edit link for education details -->
+                <div class="d-flex">
+                <a class="btn btn-warning mr-2" href="{% url 'edit_education' education.id %}">Edit</a>
+                <!-- Delete form for education details -->
+                <form action="{% url 'delete_education' education.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button class="btn btn-danger mr-2" type="submit">Delete</button>
+                </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No education details available.</p>
+{% endif %}
+<!-- Link to create a new education detail -->
+<a href="{% url 'create_education' %}" class="btn btn-primary mt-auto">Add Education Detail</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 d-flex">
+                    <div class="card w-100">
+                        <div class="card-body d-flex flex-column">
+                            <!-- Content for fourth block -->
+                            <h2>Certification Details:</h2>
+{% if certifications %}
+    <ul>
+        {% for certification in certifications %}
+            <li>
+                <p>{{ certification.title }}</p>
+                <div class="d-flex">
+
+                <a class="btn btn-warning mr-2" href="{% url 'edit_certification' certification.id %}">Edit</a>
+                <!-- Delete form for certification -->
+                <form action="{% url 'delete_certification' certification.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button class="btn btn-danger mr-2" type="submit">Delete</button>
+                </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No certification details available.</p>
+{% endif %}
+<!-- Link to create a new certification detail -->
+<a href="{% url 'create_certification' %}" class="btn btn-primary mt-auto">Add Certification</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    // JavaScript function to display confirmation message box
+    function confirmDelete() {
+        if (confirm('Are you sure you want to delete this project?')) {
+            // If user confirms, submit the form
+            document.getElementById('deleteForm').submit();
+        }
+    }
+</script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+

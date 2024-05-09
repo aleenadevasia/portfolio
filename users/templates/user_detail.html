@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Detail</title>
+</head>
+<body>
+    <h1>User Detail</h1>
+    <p><strong>Username:</strong> {{ user_profile.user.username }}</p>
+    <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+    <p><strong>Skills:</strong> {{ user_profile.skills }}</p>
+    <p><strong>Email:</strong> {{ user_profile.email }}</p>
+    <p><strong>Contact:</strong> {{ user_profile.contact }}</p>
+    <!-- Add edit and delete buttons -->
+    <a href="{% url 'edit_user' user_profile.user.id %}">Edit</a>
+    <form action="{% url 'delete_user' user_profile.user.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
+</body>
+</html>
+

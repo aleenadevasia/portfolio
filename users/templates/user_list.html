@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+    <link href="{% static 'users.css' %}" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css'>
+     <link rel="icon" type="image/x-icon" href="{% static 'assets1/favicon.ico' %}" />
+        <!-- Bootstrap Icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+        <!-- SimpleLightbox plugin CSS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+
+
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="{% url 'index' %}">APZ Portfolio</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+<!--                        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>-->
+                        <li class="nav-item"><a class="nav-link" href="{% url 'user_list' %}">Portfolio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+
+<div class="container mt-3 mb-4">
+<div class="col-lg-9 mt-4 mt-lg-0">
+    <div class="row">
+      <div class="col-md-12">
+<!--          <form method="GET" action="{% url 'user_list' %}" class="mt-3 mb-3">-->
+<!--                <div class="input-group">-->
+<!--                    <input type="text" name="search" class="form-control" placeholder="Search by name">-->
+<!--                    <button type="submit" class="btn btn-primary">Search</button>-->
+<!--                </div>-->
+<!--            </form>-->
+        <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+          <table class="table manage-candidates-top mb-0">
+            <thead>
+              <tr>
+                <th>Candidate Name</th>
+<!--                <th class="text-center">Status</th>-->
+                <th class="action text-right">View</th>
+              </tr>
+            </thead>
+            <tbody>
+                                      {% for user in users %}
+                                              {% if not user.user.is_superuser %}
+
+
+              <tr class="candidates-list">
+
+                <td class="title">
+<!--                  <div class="thumb">-->
+<!--                    <img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">-->
+<!--                  </div>-->
+                  <div class="candidate-list-details">
+                    <div class="candidate-list-info">
+                      <div class="candidate-list-title">
+                        <h5 class="mb-0">{{ user.person }}</h5>
+                      </div>
+<!--                      <div class="candidate-list-option">-->
+<!--                        <ul class="list-unstyled">-->
+<!--                          <li><i class="fas fa-filter pr-1"></i>Information Technology</li>-->
+<!--                          <li><i class="fas fa-map-marker-alt pr-1"></i>Rolling Meadows, IL 60008</li>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                    <li><a href="{% url 'base_view' user.id %}" class="text-primary" data-toggle="tooltip" title="" data-original-title="view"><i class="far fa-eye"></i></a></li>
+                  </ul>
+                </td>
+              </tr>
+                                              {% endif %}
+
+                                {% endfor %}
+
+
+            </tbody>
+
+          </table>
+<!--          <div class="text-center mt-3 mt-sm-3">-->
+<!--            <ul class="pagination justify-content-center mb-0">-->
+<!--              <li class="page-item disabled"> <span class="page-link">Prev</span> </li>-->
+<!--              <li class="page-item active" aria-current="page"><span class="page-link">1 </span> <span class="sr-only">(current)</span></li>-->
+<!--              <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--              <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--              <li class="page-item"><a class="page-link" href="#">...</a></li>-->
+<!--              <li class="page-item"><a class="page-link" href="#">25</a></li>-->
+<!--              <li class="page-item"> <a class="page-link" href="#">Next</a> </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+            <nav aria-label="page navigation example">
+    <ul class="pagination">
+        {% if users.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{users.previous_page_number}}" aria-label="previous">
+                <span aria-hidden="true">&lt;&lt;</span>
+            </a>
+        </li>
+        {% endif %}
+        {% for num in users.paginator.page_range %}
+        <li class="page-item {% if users.number == num %} active {% endif %}">
+            <a class="page-link" href="?page={{num}}">{{num}}</a>
+        </li>
+        {% endfor %}
+        {% if users.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{users.next_page_number}}" aria-label="next">
+                <span aria-hidden="true">&gt;&gt;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="bg-light py-5">
+            <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2023 - Company Name</div></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SimpleLightbox plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js'></script>
+
+
+
+</body>
+</html>
